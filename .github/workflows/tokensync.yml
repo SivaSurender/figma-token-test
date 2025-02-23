@@ -3,7 +3,7 @@ name: Token Sync
 on:
   push:
     paths:
-      - "tokens/tokens.json"
+      - "token/tokens.json"
   workflow_dispatch:
 
 jobs:

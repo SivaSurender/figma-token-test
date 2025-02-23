@@ -3,5 +3,15 @@
  */
 
 :root {
-  --global-test: #292487;
+  --colour-primary: #ffa500;
+  --colour-secondary: #ffff00;
+  --colour-tertiary: #000000;
+  --font-primary-family: monospace;
+  --font-size: 16px;
+  --font-weight: 400;
+  --font-secondary-family: sans-serif;
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+  --spacing-border-py: 1px solid #ddd;
 }

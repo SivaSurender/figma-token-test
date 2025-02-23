@@ -1,0 +1,42 @@
+ @import "../../build/css/variables.css";
+ .btn-1 {
+        background-color: var( --colour-primary);
+        font-family:var(--font-primary-family);
+      }
+      .btn-2 {
+        background-color: var( --colour-secondary);
+        font-family:var(--font-secondary-family);
+      }
+      .btn-container{
+        padding-top: var(--spacing-medium);
+      }
+ .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+          
+        }
+        .logo {
+            font-family: cursive;
+            font-size: 24px;
+            font-weight: bold;
+            color: #c14427;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-item {
+            position: relative;
+            font-size: 14px;
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-item::after {
+            content: '\25BC';
+            font-size: 12px;
+            margin-left: 5px;
+        }

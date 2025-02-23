@@ -1,0 +1,54 @@
+@import "../../build/css/variables.css";
+ .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+          
+        }
+        .logo {
+            font-family: cursive;
+            font-size: 24px;
+            font-weight: bold;
+            color: #c14427;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-item {
+            position: relative;
+            font-size: 14px;
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-item::after {
+            content: '\25BC';
+            font-size: 12px;
+            margin-left: 5px;
+        } 
+.accordion {
+           padding-top: var(--spacing-large);
+            width: 300px;
+           
+        }
+        .accordion-item {
+            border: 1px solid #ddd;
+            margin-bottom: var(--spacing-small);
+        }
+        .accordion-title {
+            background: #f1f1f1;
+            padding: var(--spacing-small);
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .accordion-content {
+            display: none;
+            padding: var(--spacing-medium);
+            background: #fff;
+        }
+        .accordion-title.active + .accordion-content {
+            display: block;
+        }

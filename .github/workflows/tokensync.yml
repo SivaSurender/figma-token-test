@@ -3,8 +3,8 @@ name: Token Sync
 on:
   push:
     paths:
-      - "tokens.json" # Run this workflow only when tokens.json changes
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+      - "tokens.json"
+  workflow_dispatch:
 
 jobs:
   update-tokens:
@@ -14,27 +14,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: false # Disables GITHUB_TOKEN for pushing changes
+          persist-credentials: false # Ensures we use PAT, not default GitHub token
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # Use the appropriate Node.js version for your project
+          node-version: 18
 
       - name: Install Dependencies
-        run: |
-          npm install -g style-dictionary  # Install Style Dictionary globally
+        run: npm install -g style-dictionary # Install Style Dictionary globally
 
       - name: Run Style Dictionary Build
-        run: |
-          npx style-dictionary build  # Runs the token transformation
+        run: npx style-dictionary build
 
       - name: Commit and Push Changes
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }} # Use Personal Access Token from Secrets
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add .
           git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
-          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SiveSurender/figma-token-test.git HEAD:main
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main

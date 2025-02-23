@@ -25,12 +25,13 @@ jobs:
       - name: Run Style Dictionary
         run: npx style-dictionary build
 
-      - name: Commit and Push Changes
+      - name: Push changes to repo
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add .
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
+        git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
+
+
+

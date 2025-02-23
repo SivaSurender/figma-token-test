@@ -1,40 +1,36 @@
-name: Sync Figma Tokens
+name: Token Sync
 
 on:
-  schedule:
-    - cron: "0 0 * * *" # Runs every day at midnight UTC
-  workflow_dispatch: # Allows manual trigger
+  push:
+    paths:
+      - "tokens.json" # Runs only when tokens.json is updated
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
-  sync_tokens:
+  build-tokens:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Fetch Design Tokens from Figma
-        run: |
-          curl -X GET "https://api.figma.com/v1/files/${{ secrets.FIGMA_FILE_ID }}" \
-          -H "X-Figma-Token: ${{ secrets.FIGMA_API_TOKEN }}" \
-          | jq '.document.children[] | select(.name=="Tokens")' > tokens.json
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 # Use the appropriate Node.js version
 
-      - name: Check for Changes
-        id: check_changes
-        run: |
-          git diff --exit-code tokens.json || echo "changes=true" >> $GITHUB_ENV
+      - name: Install Dependencies
+        run: npm install # Assumes package.json has style-dictionary as a dependency
+
+      - name: Run Style Dictionary
+        run: npx style-dictionary build
 
       - name: Commit and Push Changes
-        if: env.changes == 'true'
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add tokens.json
-          git commit -m "🔄 Auto-sync design tokens from Figma"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
           git push
-
-      - name: Publish New Version (If Tokens Changed)
-        if: env.changes == 'true'
-        run: |
-          npm version patch -m "🚀 Auto-bumped version for new tokens"
-          npm publish --access public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

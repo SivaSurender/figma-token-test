@@ -27,6 +27,10 @@ jobs:
       - name: Run Style Dictionary Build
         run: npx style-dictionary build
 
+      - name: Debug Repository URL
+        run: |
+          echo "Repository URL: https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git"
+
       - name: Commit and Push Changes
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}

@@ -3,35 +3,38 @@ name: Token Sync
 on:
   push:
     paths:
-      - "tokens.json" # Runs only when tokens.json is updated
-  workflow_dispatch: # Allows manual triggering of the workflow
+      - "tokens.json" # Run this workflow only when tokens.json changes
+  workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
-  build-tokens:
+  update-tokens:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set Up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v4
         with:
-          node-version: 18 # Use the appropriate Node.js version
+          persist-credentials: false # Disables GITHUB_TOKEN for pushing changes
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18 # Use the appropriate Node.js version for your project
 
       - name: Install Dependencies
-        run: npm install # Assumes package.json has style-dictionary as a dependency
-
-      - name: Run Style Dictionary
-        run: npx style-dictionary build
-
-      - name: Push changes to repo
         run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git add .
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
-        git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
+          npm install -g style-dictionary  # Install Style Dictionary globally
 
+      - name: Run Style Dictionary Build
+        run: |
+          npx style-dictionary build  # Runs the token transformation
 
-
+      - name: Commit and Push Changes
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }} # Use Personal Access Token from Secrets
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SiveSurender/figma-token-test.git HEAD:main

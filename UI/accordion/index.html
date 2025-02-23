@@ -1,55 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="style.css"/>
-    <script src="script.js"></script>
+
+    <script type="module" src="accordion.js"></script>
     <title>Token</title>
   </head>
   <body>
-    <style>
-    
-      
-       
-      </style>
-        <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const items = document.querySelectorAll(".accordion-title");
-            items.forEach(item => {
-                item.addEventListener("click", function () {
-                    this.classList.toggle("active");
-                });
-            });
-        });
-    </script>
-     <header class="header">
-        <div class="logo">Lilly</div>
-        <nav class="nav">
-            <span class="nav-item">Company</span>
-            <span class="nav-item">Science</span>
-            <span class="nav-item">Medicines</span>
-            <span class="nav-item">Responsibility</span>
-        </nav>
-    </header>
-   
+    <style></style>
 
-  
-    <div class="accordion">
-        <h4>Accordion </h4>
-        <div class="accordion-item">
-            <div class="accordion-title">Item 1</div>
-            <div class="accordion-content">Content for item 1.</div>
-        </div>
-        <div class="accordion-item">
-            <div class="accordion-title">Item 2</div>
-            <div class="accordion-content">Content for item 2.</div>
-        </div>
-        <div class="accordion-item">
-            <div class="accordion-title">Item 3</div>
-            <div class="accordion-content">Content for item 3.</div>
-        </div>
-    </div>
+    <header class="header">
+      <div class="logo">Lilly</div>
+      <nav class="nav">
+        <span class="nav-item">Company</span>
+        <span class="nav-item">Science</span>
+        <span class="nav-item">Medicines</span>
+        <span class="nav-item">Responsibility</span>
+      </nav>
+    </header>
+    <accordion-component></accordion-component>
   </body>
 </html>

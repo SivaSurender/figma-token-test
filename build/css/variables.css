@@ -3,9 +3,11 @@
  */
 
 :root {
-  --colour-primary: #ffa500;
-  --colour-secondary: #ffff00;
-  --colour-tertiary: #000000;
+  --colour-primary: #eaa800;
+  --colour-secondary: #ea2b00;
+  --colour-tertiary: #6200ea;
+  --colour-primary-color: #ffffff;
+  --colour-secondary-color: #000000;
   --font-primary-family: monospace;
   --font-size: 16px;
   --font-weight: 400;

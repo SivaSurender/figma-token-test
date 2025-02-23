@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: false # Disable default token
+          persist-credentials: false
 
       - name: Install Node.js
         uses: actions/setup-node@v4

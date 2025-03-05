@@ -70,20 +70,21 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
 
-          # Ensure latest changes are fetched
-          git fetch --tags origin main
+          # Ensure we are on the main branch
+          git checkout main
 
-          # Check for uncommitted changes in the working directory
+          # Fetch latest updates
+          git fetch --tags origin main
+          git pull --rebase origin main
+
+          # Check for uncommitted changes
           if ! git diff --quiet; then
             echo "🔄 Committing uncommitted changes before pulling latest updates"
             git add .
             git commit -m "🔄 Auto-commit: Sync updated token build"
           fi
 
-            # Pull latest changes with rebase to avoid merge conflicts
-          git pull --rebase origin main
-
-            # Auto-increment version
+          # Auto-increment version
           CURRENT_VERSION=$(jq -r .version package.json)
           NEW_VERSION=$(npm version patch --no-git-tag-version)
 
@@ -92,13 +93,15 @@ jobs:
           git add package.json
           git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
 
-            # Ensure the tag does not already exist, delete if necessary
+          # Ensure the tag does not already exist, delete if necessary
           if git rev-parse $NEW_VERSION >/dev/null 2>&1; then
             git tag -d $NEW_VERSION
             git push --delete origin $NEW_VERSION
           fi
 
           git tag $NEW_VERSION
+
+          # Explicitly push to the main branch
           git push origin main --tags --force
 
       - name: Publish to NPM

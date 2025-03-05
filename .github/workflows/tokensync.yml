@@ -66,40 +66,40 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-           git config --global user.name "github-actions"
-           git config --global user.email "github-actions@github.com"
-           git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
 
           # Ensure latest changes are fetched
-           git fetch --tags origin main
-          
+          git fetch --tags origin main
+
           # Check for uncommitted changes in the working directory
-           if ! git diff --quiet; then
-             echo "🔄 Committing uncommitted changes before pulling latest updates"
-             git add .
-             git commit -m "🔄 Auto-commit: Sync updated token build"
-           fi
+          if ! git diff --quiet; then
+            echo "🔄 Committing uncommitted changes before pulling latest updates"
+            git add .
+            git commit -m "🔄 Auto-commit: Sync updated token build"
+          fi
 
             # Pull latest changes with rebase to avoid merge conflicts
-            git pull --rebase origin main
+          git pull --rebase origin main
 
             # Auto-increment version
-            CURRENT_VERSION=$(jq -r .version package.json)
-            NEW_VERSION=$(npm version patch --no-git-tag-version)
+          CURRENT_VERSION=$(jq -r .version package.json)
+          NEW_VERSION=$(npm version patch --no-git-tag-version)
 
-            echo "🚀 New version: $NEW_VERSION"
+          echo "🚀 New version: $NEW_VERSION"
 
-            git add package.json
-            git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
+          git add package.json
+          git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
 
             # Ensure the tag does not already exist, delete if necessary
-            if git rev-parse $NEW_VERSION >/dev/null 2>&1; then
-              git tag -d $NEW_VERSION
-              git push --delete origin $NEW_VERSION
-            fi
+          if git rev-parse $NEW_VERSION >/dev/null 2>&1; then
+            git tag -d $NEW_VERSION
+            git push --delete origin $NEW_VERSION
+          fi
 
-            git tag $NEW_VERSION
-            git push origin main --tags --force
+          git tag $NEW_VERSION
+          git push origin main --tags --force
 
       - name: Publish to NPM
         run: npm publish --access public

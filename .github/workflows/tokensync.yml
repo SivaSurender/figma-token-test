@@ -69,13 +69,17 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
-          VERSION=$(npm version patch --no-git-tag-version)
-          echo "New version: $VERSION"
+
+          # Auto-increment patch version
+          CURRENT_VERSION=$(jq -r .version package.json)
+          NEW_VERSION=$(npm version patch --no-git-tag-version)
+
+          echo "New version: $NEW_VERSION"
+
           git add package.json
-          git commit -m "🔄 Auto-bump: New design token update to $VERSION"
-          git push origin HEAD
-          git tag $VERSION
-          git push origin $VERSION
+          git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
+          git tag $NEW_VERSION
+          git push origin HEAD --tags
 
       - name: Publish to NPM
         run: npm publish --access public

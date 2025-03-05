@@ -37,25 +37,35 @@ jobs:
           git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
           git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
 
-  publish-to-npm:
-    needs: update-tokens
+    publish-to-npm:
+    needs: update-tokens 
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0 
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          registry-url: "https://registry.npmjs.org/"
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Install Dependencies
         run: npm install
 
+      - name: Ensure Clean Git State
+        run: |
+          git reset --hard HEAD
+          git clean -fd
+
       - name: Bump Version
         run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
           npm version patch -m "🔄 Auto-bump: New design token update"
 
       - name: Publish to NPM
@@ -67,6 +77,5 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
           git push --follow-tags
+

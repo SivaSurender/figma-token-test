@@ -37,8 +37,8 @@ jobs:
           git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
           git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
 
-    publish-to-npm:
-    needs: update-tokens
+  publish-to-npm:
+    needs: update-tokens # Runs only after the CSS is updated
     runs-on: ubuntu-latest
 
     steps:
@@ -70,4 +70,3 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git push --follow-tags
-

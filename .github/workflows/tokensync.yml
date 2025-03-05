@@ -83,7 +83,10 @@ jobs:
 
           git add package.json
           git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
-          git tag $NEW_VERSION
+          if git rev-parse $NEW_VERSION >/dev/null 2>&1; then
+            git tag -d $NEW_VERSION
+            git push --delete origin $NEW_VERSION
+          fi
 
           # Forcing push to main to avoid conflicts
           git push origin main --tags --force

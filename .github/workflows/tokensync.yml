@@ -66,7 +66,11 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          npm version patch -m "🔄 Auto-bump: New design token update"
+          VERSION=$(npm version patch --no-git-tag-version)
+          echo "New version: $VERSION"
+          git add package.json
+          git commit -m "🔄 Auto-bump: New design token update to $VERSION"
+          git push origin HEAD
 
       - name: Publish to NPM
         run: npm publish --access public

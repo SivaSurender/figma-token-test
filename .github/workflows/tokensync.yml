@@ -7,35 +7,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  # update-tokens:
-  #   runs-on: ubuntu-latest
+  update-tokens:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         persist-credentials: false
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-  #     - name: Install Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 18
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-  #     - name: Install Dependencies
-  #       run: npm install -g style-dictionary
+      - name: Install Dependencies
+        run: npm install -g style-dictionary
 
-  #     - name: Run Style Dictionary Build
-  #       run: npx style-dictionary build
+      - name: Run Style Dictionary Build
+        run: npx style-dictionary build
 
-  #     - name: Commit and Push Changes
-  #       env:
-  #         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-  #       run: |
-  #         git config --global user.name "github-actions"
-  #         git config --global user.email "github-actions@github.com"
-  #         git add .
-  #         git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
-  #         git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
+      - name: Commit and Push Changes
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
+          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
 
   publish-to-npm:
     needs: update-tokens # Runingonly after the CSS is updated

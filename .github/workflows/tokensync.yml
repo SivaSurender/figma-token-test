@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - "token/tokens.json"
+    branches:
+      - main
+    tags-ignore:
+      - "*"
   workflow_dispatch:
 
 jobs:

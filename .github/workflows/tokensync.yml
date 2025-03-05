@@ -77,4 +77,5 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git push --follow-tags
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
+          git push origin --follow-tags

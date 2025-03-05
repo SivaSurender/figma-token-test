@@ -1,6 +1,6 @@
 {
   "name": "design-tokens-own",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Public design tokens for our projects",
   "main": "build/css/variables.css",
   "files": [

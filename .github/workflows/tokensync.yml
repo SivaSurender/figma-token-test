@@ -41,81 +41,81 @@ jobs:
           git diff --quiet && git diff --staged --quiet || git commit -m "Update token-based styles"
           git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git HEAD:main
 
-  publish-to-npm:
-    needs: update-tokens # Runingonly after the CSS is updated
-    runs-on: ubuntu-latest
+  # publish-to-npm:
+  #   needs: update-tokens # Runingonly after the CSS is updated
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0 # Ensuringg full commit history is available
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         persist-credentials: false
+  #         fetch-depth: 0 # Ensuringg full commit history is available
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          registry-url: "https://registry.npmjs.org/"
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
+  #         registry-url: "https://registry.npmjs.org/"
 
-      - name: Install Dependencies
-        run: npm install
+  #     - name: Install Dependencies
+  #       run: npm install
 
-      - name: Ensure Clean Git State
-        run: |
-          git reset --hard HEAD  # Removinn uncommitted changes
-          git clean -fd  # Delete untracked files
+  #     - name: Ensure Clean Git State
+  #       run: |
+  #         git reset --hard HEAD  # Removinn uncommitted changes
+  #         git clean -fd  # Delete untracked files
 
-      - name: Bump Version
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
+  #     - name: Bump Version
+  #       env:
+  #         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  #       run: |
+  #         git config --global user.name "github-actions"
+  #         git config --global user.email "github-actions@github.com"
+  #         git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
 
-          # Ensure we are on the main branch
-          git checkout main
+  #         # Ensure we are on the main branch
+  #         git checkout main
 
-          # Fetch latest updates
-          git fetch --tags origin main
-          git pull --rebase origin main
+  #         # Fetch latest updates
+  #         git fetch --tags origin main
+  #         git pull --rebase origin main
 
-          # Check for uncommitted changes
-          if ! git diff --quiet; then
-            echo "🔄 Committing uncommitted changes before pulling latest updates"
-            git add .
-            git commit -m "🔄 Auto-commit: Sync updated token build"
-          fi
+  #         # Check for uncommitted changes
+  #         if ! git diff --quiet; then
+  #           echo "🔄 Committing uncommitted changes before pulling latest updates"
+  #           git add .
+  #           git commit -m "🔄 Auto-commit: Sync updated token build"
+  #         fi
 
-          # Auto-increment version
-          CURRENT_VERSION=$(jq -r .version package.json)
-          NEW_VERSION=$(npm version patch --no-git-tag-version)
+  #         # Auto-increment version
+  #         CURRENT_VERSION=$(jq -r .version package.json)
+  #         NEW_VERSION=$(npm version patch --no-git-tag-version)
 
-          echo "🚀 New version: $NEW_VERSION"
+  #         echo "🚀 New version: $NEW_VERSION"
 
-          git add package.json
-          git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
+  #         git add package.json
+  #         git commit -m "🔄 Auto-bump: New design token update to $NEW_VERSION"
 
-          # Ensure the tag does not already exist, delete if necessary
-          if git rev-parse $NEW_VERSION >/dev/null 2>&1; then
-            git tag -d $NEW_VERSION
-            git push --delete origin $NEW_VERSION
-          fi
+  #         # Ensure the tag does not already exist, delete if necessary
+  #         if git rev-parse $NEW_VERSION >/dev/null 2>&1; then
+  #           git tag -d $NEW_VERSION
+  #           git push --delete origin $NEW_VERSION
+  #         fi
 
-          git tag $NEW_VERSION
+  #         git tag $NEW_VERSION
 
-          # Explicitly push to the main branch
-          git push origin main --tags --force
+  #         # Explicitly push to the main branch
+  #         git push origin main --tags --force
 
-      - name: Publish to NPM
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  #     - name: Publish to NPM
+  #       run: npm publish --access public
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Push New Version to GitHub
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
-          git push origin --follow-tags
+  #     - name: Push New Version to GitHub
+  #       env:
+  #         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  #       run: |
+  #         git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/SivaSurender/figma-token-test.git
+  #         git push origin --follow-tags

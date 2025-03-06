@@ -3,14 +3,14 @@
  */
 
 :root {
-  --colour-primary: #008000;
-  --colour-secondary: #ffa500;
+  --colour-primary: #00ffff;
+  --colour-secondary: #00ffff;
   --colour-tertiary: #0000ff;
   --colour-primary-color: #008000;
   --colour-secondary-color: #000000;
   --colour-sdf: #340237;
-  --font-primary-family: monospace;
-  --font-size: 16px;
+  --font-primary-family: sans-serif;
+  --font-size: 32px;
   --font-weight: 400;
   --font-secondary-family: sans-serif;
   --font-tertiary-font-updateddd: open-sans;
